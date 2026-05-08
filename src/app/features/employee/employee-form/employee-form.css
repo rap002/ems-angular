@@ -1,0 +1,123 @@
+.form-container {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  padding: 2.5rem;
+}
+
+.card-header {
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 1.5rem;
+}
+
+.card-header h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #161616;
+  margin-bottom: 0.5rem;
+}
+
+.card-header p {
+  color: #6f6f6f;
+  font-size: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #393939;
+}
+
+.form-group input, .form-group select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #f9f9f9;
+}
+
+.form-group input:focus, .form-group select:focus {
+  outline: none;
+  border-color: #0062ff;
+  box-shadow: 0 0 0 4px rgba(0, 98, 255, 0.1);
+  background-color: white;
+}
+
+.form-actions {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 2rem;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #0062ff;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0043ce;
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  background-color: #dcdcdc;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background-color: white;
+  color: #393939;
+  border: 1px solid #dcdcdc;
+}
+
+.btn-secondary:hover {
+  background-color: #f4f4f4;
+}
+
+.error-alert {
+  background-color: #fff1f1;
+  color: #da1e28;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  border-left: 4px solid #da1e28;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

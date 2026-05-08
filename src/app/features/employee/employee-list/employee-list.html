@@ -1,12 +1,37 @@
 <div class="employee-container">
-  <div class="header">
-    <h1>Employees</h1>
-    <p class="subtitle">Manage and view company employees</p>
+  <div class="header-section">
+    <div class="title-area">
+      <h1>Employee Directory</h1>
+      <p class="subtitle">Search, view, and manage IBM personnel</p>
+    </div>
+    <div class="header-actions">
+      <button routerLink="/employees/add" class="btn btn-add">
+        <span class="icon">+</span> Add New Employee
+      </button>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" #searchInput (keyup.enter)="executeSearch(searchInput.value)" placeholder="Search by name or ID...">
+      </div>
+      <button (click)="executeSearch(searchInput.value)" class="btn btn-search">Search</button>
+    </div>
+    <div class="filter-controls">
+      <select #deptFilter (change)="loadEmployees(deptFilter.value)">
+        <option value="">Filter by Department</option>
+        <option value="1">Engineering</option>
+        <option value="2">Human Resources</option>
+        <option value="3">Sales</option>
+      </select>
+    </div>
   </div>
 
   <div *ngIf="loading()" class="loading">
     <div class="spinner"></div>
-    <p>Loading employees...</p>
+    <p>Retrieving data...</p>
   </div>
   
   <div *ngIf="error()" class="error">{{ error() }}</div>
@@ -16,9 +41,9 @@
       <table class="employee-table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Job Title</th>
+            <th>Employee Details</th>
+            <th>Contact</th>
+            <th>Role</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -26,23 +51,36 @@
         <tbody>
           <tr *ngFor="let emp of employees()">
             <td>
-              <div class="emp-name">{{ emp.firstName }} {{ emp.lastName }}</div>
-              <div class="emp-id">ID: {{ emp.id }}</div>
+              <div class="emp-identity">
+                <div class="emp-initials">{{ emp.firstName.charAt(0) }}{{ emp.lastName.charAt(0) }}</div>
+                <div>
+                  <div class="emp-name">{{ emp.firstName }} {{ emp.lastName }}</div>
+                  <div class="emp-id">System ID: #{{ emp.id }}</div>
+                </div>
+              </div>
             </td>
-            <td>{{ emp.email }}</td>
+            <td>
+              <div class="emp-contact">{{ emp.email }}</div>
+              <div class="emp-phone">{{ emp.phone }}</div>
+            </td>
             <td>{{ emp.roleName || 'N/A' }}</td>
             <td>
-              <span class="status-badge" [ngClass]="emp.status ? emp.status.toLowerCase() : ''">
-                {{ emp.status || 'Active' }}
+              <span class="status-badge" [ngClass]="emp.status.toLowerCase()">
+                {{ emp.status }}
               </span>
             </td>
             <td>
-              <button class="btn btn-outline">View Details</button>
+              <div class="action-buttons-group">
+                <button [routerLink]="['/employees', emp.id]" class="action-btn view-btn" title="View Full Profile">View</button>
+                <button [routerLink]="['/employees/edit', emp.id]" class="action-btn edit-btn" title="Edit Employee">Edit</button>
+                <button (click)="deleteEmployee(emp.id)" class="action-btn delete-btn" title="Terminate Employee">Delete</button>
+              </div>
             </td>
           </tr>
           <tr *ngIf="employees().length === 0">
             <td colspan="5" class="empty-state">
-              <p>No employees found.</p>
+              <p>No employees found matching your search criteria.</p>
+              <button (click)="loadEmployees()" class="btn btn-outline">Clear Search</button>
             </td>
           </tr>
         </tbody>

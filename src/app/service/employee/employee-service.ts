@@ -79,7 +79,7 @@ export class EmployeeService {
   }
   findEmployeesByName=(name?:string)=>{
     const path=`${BASE_URL}/search?${name?'name='+name:""}`
-    return this.client.get<EmployeeResponse>(path)
+    return this.client.get<EmployeeResponse[]>(path)
   }
   addEmployee=(reqBody:EmployeeRequest)=>{
     const path=`${BASE_URL}`

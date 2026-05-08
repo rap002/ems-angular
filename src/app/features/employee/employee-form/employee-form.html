@@ -1,0 +1,70 @@
+<div class="form-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>{{ isEditMode ? 'Edit Employee' : 'Onboard New Employee' }}</h2>
+      <p>Enter the employee details below to {{ isEditMode ? 'update' : 'create' }} their profile.</p>
+    </div>
+
+    <div *ngIf="error" class="error-alert">{{ error }}</div>
+
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="employee-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input id="firstName" type="text" formControlName="firstName" placeholder="e.g. John">
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input id="lastName" type="text" formControlName="lastName" placeholder="e.g. Doe">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input id="email" type="email" formControlName="email" placeholder="john.doe@ibm.com">
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input id="phone" type="text" formControlName="phone" placeholder="+1 (555) 000-0000">
+        </div>
+
+        <div class="form-group">
+          <label for="salary">Base Salary</label>
+          <input id="salary" type="number" formControlName="salary" placeholder="0.00">
+        </div>
+
+        <div class="form-group">
+          <label for="hireDate">Hire Date</label>
+          <input id="hireDate" type="date" formControlName="hireDate">
+        </div>
+
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" formControlName="status">
+            <option value="ACTIVE">Active</option>
+            <option value="ON_LEAVE">On Leave</option>
+            <option value="TERMINATED">Terminated</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="departmentName">Department</label>
+          <input id="departmentName" type="text" formControlName="departmentName" placeholder="e.g. Engineering">
+        </div>
+
+        <div class="form-group">
+          <label for="roleName">Job Role</label>
+          <input id="roleName" type="text" formControlName="roleName" placeholder="e.g. Software Engineer">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" routerLink="/employees" class="btn btn-secondary">Cancel</button>
+        <button type="submit" [disabled]="employeeForm.invalid || loading" class="btn btn-primary">
+          {{ loading ? 'Saving...' : (isEditMode ? 'Update Employee' : 'Create Employee') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<header class="navbar" *ngIf="isLoggedIn()">
+  <div class="nav-container">
+    <div class="nav-left">
+      <div class="logo">
+        <span class="ibm-text">IBM</span>
+        <span class="ems-text">EMS</span>
+      </div>
+    </div>
+
+    <nav class="nav-right">
+      <a routerLink="/home" routerLinkActive="active" class="nav-link">Home</a>
+      
+      <div class="dropdown">
+        <button class="dropbtn">Employees </button>
+        <!-- <div class="dropdown-content">
+          <a routerLink="/employees" routerLinkActive="active">View All</a>
+          <a routerLink="/employees">Find by ID</a>
+          <a routerLink="/employees">Search by Name</a>
+          <a routerLink="/employees">By Department</a>
+          <div class="divider"></div>
+          <a routerLink="/employees/add" routerLinkActive="active">Add Employee</a>
+        </div> -->
+      </div>
+
+      <button (click)="logout()" class="btn-logout">Logout</button>
+    </nav>
+  </div>
+</header>
