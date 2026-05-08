@@ -30,6 +30,13 @@ export interface EmployeeResponse extends EmployeeRequest{
 
   
 }
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}
 
 const BASE_URL=environment.baseUrl+"/api/v1/employees"
 @Injectable({

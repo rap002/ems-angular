@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import path from 'path';
 import { map } from 'rxjs';
 
 export interface TokenResponse {
@@ -26,13 +25,17 @@ export class AuthService {
         "password": password
       }).pipe(
       map((val)=>{
-        sessionStorage.setItem("auth",val.token)
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          sessionStorage.setItem("auth",val.token)
+        }
         return val
       })
     )
   }
 }
 export const isLoggedIn=()=>{
-  if (sessionStorage.getItem("auth")){ return true}
+  if (typeof window !== 'undefined' && window.sessionStorage) {
+    if (sessionStorage.getItem("auth")){ return true}
+  }
   return false
 }

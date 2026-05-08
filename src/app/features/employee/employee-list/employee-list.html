@@ -1,0 +1,62 @@
+<div class="employee-container">
+  <div class="header">
+    <h1>Employees</h1>
+    <p class="subtitle">Manage and view company employees</p>
+  </div>
+
+  <div *ngIf="loading()" class="loading">
+    <div class="spinner"></div>
+    <p>Loading employees...</p>
+  </div>
+  
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+
+  <div class="card" *ngIf="!loading() && !error()">
+    <div class="table-responsive">
+      <table class="employee-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Job Title</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of employees()">
+            <td>
+              <div class="emp-name">{{ emp.firstName }} {{ emp.lastName }}</div>
+              <div class="emp-id">ID: {{ emp.id }}</div>
+            </td>
+            <td>{{ emp.email }}</td>
+            <td>{{ emp.roleName || 'N/A' }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="emp.status ? emp.status.toLowerCase() : ''">
+                {{ emp.status || 'Active' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-outline">View Details</button>
+            </td>
+          </tr>
+          <tr *ngIf="employees().length === 0">
+            <td colspan="5" class="empty-state">
+              <p>No employees found.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination" *ngIf="totalPages() > 1">
+      <button class="btn btn-icon" [disabled]="currentPage() === 0" (click)="prevPage()">
+        &laquo; Prev
+      </button>
+      <span class="page-info">Page {{ currentPage() + 1 }} of {{ totalPages() }}</span>
+      <button class="btn btn-icon" [disabled]="currentPage() >= totalPages() - 1" (click)="nextPage()">
+        Next &raquo;
+      </button>
+    </div>
+  </div>
+</div>
