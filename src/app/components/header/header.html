@@ -9,12 +9,12 @@
 
     <nav class="nav-right">
       <a routerLink="/home" routerLinkActive="active" class="nav-link">Home</a>
-
+      
       <div class="dropdown">
         <button class="dropbtn">Employees</button>
         <div class="dropdown-content">
           <a routerLink="/employees" routerLinkActive="active">View Employees</a>
-          <a routerLink="/employees/add" routerLinkActive="active">Add Employee</a>
+          <a *ngIf="isAdmin()" routerLink="/employees/add" routerLinkActive="active">Add New Employee</a>
         </div>
       </div>
 
@@ -22,7 +22,7 @@
         <button class="dropbtn">Departments</button>
         <div class="dropdown-content">
           <a routerLink="/departments" routerLinkActive="active">View Departments</a>
-          <a routerLink="/departments/add" routerLinkActive="active">Add Department</a>
+          <a *ngIf="isAdmin()" routerLink="/departments/add" routerLinkActive="active">Add New Department</a>
         </div>
       </div>
 
