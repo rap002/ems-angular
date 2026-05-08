@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+/ibm-ems-springboot
 
 # Node
 /node_modules
