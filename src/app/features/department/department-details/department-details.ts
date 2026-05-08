@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../service/auth/auth-service';
 import {
   DepartmentResponse,
   DepartmentService
@@ -9,7 +10,7 @@ import {
 @Component({
   selector: 'app-department-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './department-details.html',
   styleUrl: './department-details.css',
 })
@@ -22,12 +23,16 @@ export class DepartmentDetails implements OnInit {
   error = signal('');
   detailsError = signal('');
 
+  isAdmin = signal(false);
+
   constructor(
     private departmentService: DepartmentService,
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin.set(this.authService.isAdmin());
     this.loadDepartments();
 
     this.route.paramMap.subscribe((params) => {

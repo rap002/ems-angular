@@ -1,7 +1,14 @@
 <div class="department-container">
   <div class="header">
-    <h1>Department Details</h1>
-    <p class="subtitle">View all departments and selected department information</p>
+    <div class="title-area">
+      <h1>Department Details</h1>
+      <p class="subtitle">View all departments and selected department information</p>
+    </div>
+    <div class="header-actions" *ngIf="isAdmin()">
+      <button routerLink="/departments/add" class="btn btn-primary">
+        <span class="icon">+</span> Add New Department
+      </button>
+    </div>
   </div>
 
   <div *ngIf="loading()" class="loading">
