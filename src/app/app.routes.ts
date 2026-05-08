@@ -2,14 +2,37 @@ import { Routes } from '@angular/router';
 import { EmployeeList } from './features/employee/employee-list/employee-list';
 import { Login } from './features/auth/login/login';
 import { Home } from './features/home/home';
+import { DepartmentDetails } from './features/department/department-details/department-details';
+import { DepartmentAdd } from './features/department/department-add/department-add';
 import { guardInterceptorGuard } from './guard/guard-interceptor-guard';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'home', component: Home, canActivate: [guardInterceptorGuard] },
+
   { path: 'employees', component: EmployeeList, canActivate: [guardInterceptorGuard] },
-  { path: 'employees/add', loadComponent: () => import('./features/employee/employee-form/employee-form').then(m => m.EmployeeForm), canActivate: [guardInterceptorGuard] },
-  { path: 'employees/edit/:id', loadComponent: () => import('./features/employee/employee-form/employee-form').then(m => m.EmployeeForm), canActivate: [guardInterceptorGuard] },
-  { path: 'employees/:id', loadComponent: () => import('./features/employee/employee-details/employee-details').then(m => m.EmployeeDetails), canActivate: [guardInterceptorGuard] },
+  {
+    path: 'employees/add',
+    loadComponent: () =>
+      import('./features/employee/employee-form/employee-form').then(m => m.EmployeeForm),
+    canActivate: [guardInterceptorGuard]
+  },
+  {
+    path: 'employees/edit/:id',
+    loadComponent: () =>
+      import('./features/employee/employee-form/employee-form').then(m => m.EmployeeForm),
+    canActivate: [guardInterceptorGuard]
+  },
+  {
+    path: 'employees/:id',
+    loadComponent: () =>
+      import('./features/employee/employee-details/employee-details').then(m => m.EmployeeDetails),
+    canActivate: [guardInterceptorGuard]
+  },
+
+  { path: 'departments', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
+  { path: 'departments/add', component: DepartmentAdd, canActivate: [guardInterceptorGuard] },
+  { path: 'departments/:id', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
+
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
