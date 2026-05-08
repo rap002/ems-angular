@@ -38,7 +38,7 @@ export class Login {
 
     this.authService.login(username, password).subscribe({
       next: () => {
-        this.router.navigate(['/employees']);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         this.error = 'Invalid username or password';

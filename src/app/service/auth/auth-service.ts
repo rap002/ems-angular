@@ -32,6 +32,12 @@ export class AuthService {
       })
     )
   }
+
+  logout = () => {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      sessionStorage.removeItem("auth");
+    }
+  }
 }
 export const isLoggedIn=()=>{
   if (typeof window !== 'undefined' && window.sessionStorage) {

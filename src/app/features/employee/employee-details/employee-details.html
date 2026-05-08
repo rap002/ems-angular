@@ -1,0 +1,83 @@
+<div class="details-container">
+  <div *ngIf="loading()" class="loading-state">
+    <div class="spinner"></div>
+    <p>Retrieving employee records...</p>
+  </div>
+
+  <div *ngIf="error()" class="error-state">
+    <h3>Error</h3>
+    <p>{{ error() }}</p>
+    <button routerLink="/employees" class="btn btn-secondary">Back to List</button>
+  </div>
+
+  <div class="profile-card" *ngIf="employee() && !loading()">
+    <div class="profile-header">
+      <div class="avatar">
+        {{ employee()?.firstName?.charAt(0) }}{{ employee()?.lastName?.charAt(0) }}
+      </div>
+      <div class="header-info">
+        <h1>{{ employee()?.firstName }} {{ employee()?.lastName }}</h1>
+        <div class="badges">
+          <span class="status-badge" [ngClass]="employee()?.status?.toLowerCase()">{{ employee()?.status }}</span>
+          <span class="role-badge">{{ employee()?.roleName || 'Employee' }}</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button [routerLink]="['/employees/edit', employee()?.id]" class="btn btn-edit">Edit Profile</button>
+        <button (click)="deleteEmployee()" class="btn btn-delete">Terminate</button>
+      </div>
+    </div>
+
+    <div class="details-grid">
+      <div class="detail-section">
+        <h3>Contact Information</h3>
+        <div class="detail-item">
+          <span class="label">Email</span>
+          <span class="value">{{ employee()?.email }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Phone</span>
+          <span class="value">{{ employee()?.phone }}</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Employment Details</h3>
+        <div class="detail-item">
+          <span class="label">Department</span>
+          <span class="value">{{ employee()?.departmentName || 'N/A' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Hire Date</span>
+          <span class="value">{{ employee()?.hireDate | date:'longDate' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Base Salary</span>
+          <span class="value">{{ employee()?.salary | currency:'USD' }}</span>
+        </div>
+      </div>
+
+      <div class="detail-section full-width">
+        <h3>System Metadata</h3>
+        <div class="metadata-grid">
+          <div class="detail-item">
+            <span class="label">Created At</span>
+            <span class="value">{{ employee()?.createdAt | date:'medium' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Last Updated</span>
+            <span class="value">{{ employee()?.updatedAt | date:'medium' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">System ID</span>
+            <span class="value code">{{ employee()?.id }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button routerLink="/employees" class="btn btn-secondary">Back to Directory</button>
+    </div>
+  </div>
+</div>
