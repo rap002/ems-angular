@@ -1,7 +1,10 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { EmployeeService, EmployeeResponse } from '../../../service/employee/employee-service';
+import { DepartmentService, DepartmentResponse } from '../../../service/department/department-service';
+import { AuthService } from '../../../service/auth/auth-service';
 
 @Component({
   selector: 'app-employee-list',
@@ -11,32 +14,59 @@ import { EmployeeService, EmployeeResponse } from '../../../service/employee/emp
   styleUrl: './employee-list.css',
 })
 export class EmployeeList implements OnInit {
+  private employeeService = inject(EmployeeService);
+  private departmentService = inject(DepartmentService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+
+  isAdmin = signal<boolean>(false);
+
   employees = signal<EmployeeResponse[]>([]);
+  departments = signal<DepartmentResponse[]>([]);
   currentPage = signal(0);
   totalPages = signal(1);
   totalElements = signal(0);
-  pageSize = signal(10);
   loading = signal(false);
   error = signal('');
   searchTerm = signal('');
 
-  constructor(private employeeService: EmployeeService, private router: Router) {}
+  currentStatus = signal<string>('');
 
   ngOnInit(): void {
-    this.loadEmployees();
+    if (isPlatformBrowser(this.platformId)) {
+      this.isAdmin.set(this.authService.isAdmin());
+      this.loadEmployees();
+      this.loadDepartments();
+    }
   }
 
-  loadEmployees(deptId?: string): void {
+  loadDepartments(): void {
+    this.departmentService.getAllDepartments().subscribe({
+      next: (data) => this.departments.set(data),
+      error: () => console.error('Failed to load departments for filter')
+    });
+  }
+
+  loadEmployees(deptId?: string, status?: string): void {
     this.loading.set(true);
     this.error.set('');
     
-    const request = deptId 
-      ? this.employeeService.getAllEmployeesByDepartment(deptId)
-      : this.employeeService.getAllEmployees();
+    // Determine which status to use
+    const activeStatus = status !== undefined ? status : this.currentStatus();
+    if (status !== undefined) this.currentStatus.set(status);
+
+    let request;
+    if (deptId) {
+      request = this.employeeService.getAllEmployeesByDepartment(deptId);
+    } else if (activeStatus) {
+      request = this.employeeService.getEmployeesByStatus(activeStatus);
+    } else {
+      request = this.employeeService.getAllEmployees();
+    }
 
     (request as any).subscribe({
       next: (response: any) => {
-        // Handle both Page (from getAll) and Array (from getByDept)
         const content = response.content !== undefined ? response.content : response;
         this.employees.set(content || []);
         

@@ -67,7 +67,7 @@ export class EmployeeService {
       }
     }
 
-    return this.client.get<EmployeeResponse[]>(path,{params:httpParams})
+    return this.client.get<Page<EmployeeResponse>>(path, { params: httpParams });
   }
   getEmployeeByID=(id:string)=>{
     const path=`${BASE_URL}/${id}`
@@ -93,5 +93,8 @@ export class EmployeeService {
     const path=`${BASE_URL}/${id}`
     return this.client.delete<void>(path)
   }
-
+  getEmployeesByStatus=(status:string)=>{
+    const path=`${BASE_URL}/status/${status}`
+    return this.client.get<EmployeeResponse[]>(path)
+  }
 }

@@ -1,8 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EmployeeService, EmployeeRequest } from '../../../service/employee/employee-service';
+import { DepartmentService, DepartmentResponse } from '../../../service/department/department-service';
+import { RoleService, RoleResponse } from '../../../service/role/role-service';
 
 @Component({
   selector: 'app-employee-form',
@@ -14,6 +16,8 @@ import { EmployeeService, EmployeeRequest } from '../../../service/employee/empl
 export class EmployeeForm implements OnInit {
   private fb = inject(FormBuilder);
   private employeeService = inject(EmployeeService);
+  private departmentService = inject(DepartmentService);
+  private roleService = inject(RoleService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -23,26 +27,41 @@ export class EmployeeForm implements OnInit {
   loading = false;
   error = '';
 
+  departments = signal<DepartmentResponse[]>([]);
+  roles = signal<RoleResponse[]>([]);
+
   constructor() {
     this.employeeForm = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]],
-      salary: [null, [Validators.min(0)]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      phone: ['', [Validators.required, Validators.pattern('^[+]?[0-9]{10,15}$')]],
+      salary: [null, [Validators.required, Validators.min(0.01)]],
       hireDate: [new Date().toISOString().split('T')[0], [Validators.required]],
       status: ['ACTIVE', [Validators.required]],
-      departmentName: [''],
-      roleName: ['']
+      departmentId: ['', [Validators.required]],
+      roleId: ['', [Validators.required]]
     });
   }
 
   ngOnInit(): void {
+    this.loadMetadata();
     this.employeeId = this.route.snapshot.paramMap.get('id');
     if (this.employeeId) {
       this.isEditMode = true;
       this.loadEmployeeData(this.employeeId);
     }
+  }
+
+  loadMetadata() {
+    this.departmentService.getAllDepartments().subscribe({
+      next: (data) => this.departments.set(data),
+      error: () => console.error('Failed to load departments')
+    });
+    this.roleService.getAllRoles().subscribe({
+      next: (data) => this.roles.set(data),
+      error: () => console.error('Failed to load roles')
+    });
   }
 
   loadEmployeeData(id: string) {
@@ -57,8 +76,8 @@ export class EmployeeForm implements OnInit {
           salary: emp.salary,
           hireDate: emp.hireDate,
           status: emp.status,
-          departmentName: emp.departmentName,
-          roleName: emp.roleName
+          departmentId: emp.departmentId,
+          roleId: emp.roleId
         });
         this.loading = false;
       },
@@ -70,10 +89,20 @@ export class EmployeeForm implements OnInit {
   }
 
   onSubmit() {
-    if (this.employeeForm.invalid) return;
+    if (this.employeeForm.invalid) {
+      this.error = 'Please fill all required fields correctly.';
+      console.log('Form invalid:', this.employeeForm.errors);
+      // Mark all fields as touched to show validation errors
+      Object.values(this.employeeForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
+      return;
+    }
 
     this.loading = true;
+    this.error = '';
     const formValue = this.employeeForm.value;
+    
     const request: EmployeeRequest = {
       ...formValue,
       fullName: `${formValue.firstName} ${formValue.lastName}`,
@@ -81,19 +110,29 @@ export class EmployeeForm implements OnInit {
       updatedAt: new Date().toISOString()
     };
 
+    console.log('Submitting request:', request);
+
     if (this.isEditMode && this.employeeId) {
       this.employeeService.updateEmployee(this.employeeId, request).subscribe({
-        next: () => this.router.navigate(['/employees']),
-        error: () => {
-          this.error = 'Failed to update employee.';
+        next: (res) => {
+          console.log('Update successful:', res);
+          this.router.navigate(['/employees']);
+        },
+        error: (err) => {
+          console.error('Update failed:', err);
+          this.error = err.error?.message || 'Failed to update employee. Please check for duplicate email or invalid data.';
           this.loading = false;
         }
       });
     } else {
       this.employeeService.addEmployee(request).subscribe({
-        next: () => this.router.navigate(['/employees']),
-        error: () => {
-          this.error = 'Failed to add employee.';
+        next: (res) => {
+          console.log('Create successful:', res);
+          this.router.navigate(['/employees']);
+        },
+        error: (err) => {
+          console.error('Create failed:', err);
+          this.error = err.error?.message || 'Failed to onboard employee. Please ensure all IDs are correct and email is unique.';
           this.loading = false;
         }
       });
