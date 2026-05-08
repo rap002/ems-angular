@@ -34,5 +34,21 @@ export const routes: Routes = [
   { path: 'departments/add', component: DepartmentAdd, canActivate: [guardInterceptorGuard] },
   { path: 'departments/:id', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
 
+  { 
+    path: 'roles', 
+    loadComponent: () => import('./features/role/role-list/role-list').then(m => m.RoleList), 
+    canActivate: [guardInterceptorGuard] 
+  },
+  { 
+    path: 'roles/add', 
+    loadComponent: () => import('./features/role/role-form/role-form').then(m => m.RoleForm), 
+    canActivate: [guardInterceptorGuard] 
+  },
+  { 
+    path: 'roles/edit/:id', 
+    loadComponent: () => import('./features/role/role-form/role-form').then(m => m.RoleForm), 
+    canActivate: [guardInterceptorGuard] 
+  },
+
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
