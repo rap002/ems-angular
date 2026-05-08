@@ -5,7 +5,7 @@
       <p class="subtitle">Search, view, and manage IBM personnel</p>
     </div>
     <div class="header-actions">
-      <button routerLink="/employees/add" class="btn btn-add">
+      <button *ngIf="isAdmin()" routerLink="/employees/add" class="btn btn-add">
         <span class="icon">+</span> Add New Employee
       </button>
     </div>
@@ -20,11 +20,16 @@
       <button (click)="executeSearch(searchInput.value)" class="btn btn-search">Search</button>
     </div>
     <div class="filter-controls">
-      <select #deptFilter (change)="loadEmployees(deptFilter.value)">
-        <option value="">Filter by Department</option>
-        <option value="1">Engineering</option>
-        <option value="2">Human Resources</option>
-        <option value="3">Sales</option>
+      <!-- <select #statusFilter [value]="currentStatus()" (change)="loadEmployees(undefined, statusFilter.value)">
+        <option value="">All Statuses</option>
+        <option value="ACTIVE">Active Only</option>
+        <option value="INACTIVE">Inactive</option>
+        <option value="TERMINATED">Terminated</option>
+      </select> -->
+
+      <select #deptFilter (change)="loadEmployees(deptFilter.value, undefined)">
+        <option value="">All Departments</option>
+        <option *ngFor="let dept of departments()" [value]="dept.id">{{ dept.name }}</option>
       </select>
     </div>
   </div>
@@ -45,7 +50,7 @@
             <th>Contact</th>
             <th>Role</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th *ngIf="isAdmin()">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -69,7 +74,7 @@
                 {{ emp.status }}
               </span>
             </td>
-            <td>
+            <td *ngIf="isAdmin()">
               <div class="action-buttons-group">
                 <button [routerLink]="['/employees', emp.id]" class="action-btn view-btn" title="View Full Profile">View</button>
                 <button [routerLink]="['/employees/edit', emp.id]" class="action-btn edit-btn" title="Edit Employee">Edit</button>
