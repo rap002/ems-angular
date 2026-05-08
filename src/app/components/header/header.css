@@ -28,12 +28,10 @@
   letter-spacing: -0.5px;
 }
 
-.ibm-text {
-  color: #0062ff; /* IBM Blue */
-}
-
-.ems-text {
-  color: #161616;
+.ibm-logo {
+  height: 32px;
+  width: auto;
+  display: block;
 }
 
 .nav-right {
