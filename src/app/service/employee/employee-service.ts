@@ -30,6 +30,13 @@ export interface EmployeeResponse extends EmployeeRequest{
 
   
 }
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}
 
 const BASE_URL=environment.baseUrl+"/api/v1/employees"
 @Injectable({
@@ -41,7 +48,7 @@ export class EmployeeService {
   ){}
   getAllEmployees=()=>{
     const path=BASE_URL
-    return this.client.get<EmployeeResponse[]>(path)
+    return this.client.get<Page<EmployeeResponse>>(path)
   }
   getEmployeeByID=(id:string)=>{
     const path=`${BASE_URL}/${id}`
