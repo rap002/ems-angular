@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
@@ -39,9 +39,28 @@ export class EmployeeService {
   constructor(
     private readonly client:HttpClient
   ){}
-  getAllEmployees=()=>{
+  getAllEmployees=(params?:{
+    size?:number,
+    page?:number,
+    sort?:string
+
+  })=>{
     const path=BASE_URL
-    return this.client.get<EmployeeResponse[]>(path)
+    let httpParams = new HttpParams();
+    
+    if (params) {
+      if (params.size !== undefined) {
+        httpParams = httpParams.set('size', params.size);
+      }
+      if (params.page !== undefined) {
+        httpParams = httpParams.set('page', params.page);
+      }
+      if (params.sort) {
+        httpParams = httpParams.set('sort', params.sort);
+      }
+    }
+
+    return this.client.get<EmployeeResponse[]>(path,{params:httpParams})
   }
   getEmployeeByID=(id:string)=>{
     const path=`${BASE_URL}/${id}`
