@@ -67,6 +67,7 @@ export class EmployeeList implements OnInit {
 
     (request as any).subscribe({
       next: (response: any) => {
+        console.log("Response:",response)
         const content = response.content !== undefined ? response.content : response;
         this.employees.set(content || []);
         
