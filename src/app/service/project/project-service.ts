@@ -1,32 +1,22 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-
 import { EmployeeResponse } from '../employee/employee-service';
-
+import { map } from 'rxjs/operators';
 export interface ProjectRequest {
 
   name: string;
 
   description: string;
 
-  startDate: string;
+  startDate: string; // yyyy-MM-dd
+  endDate?: string;   // yyyy-MM-dd
 
-  endDate: string;
-
-  status:
-    | 'PLANNED'
-    | 'ACTIVE'
-    | 'ON_HOLD'
-    | 'COMPLETED'
-    | 'CANCELLED';
-
+  status: 'PLANNED' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';
 }
-
-export interface ProjectResponse extends ProjectRequest {
-
+export interface ProjectResponse extends ProjectRequest{
   id: string;
-
+  _id?: string;
 }
 
 export interface AssignEmployeeRequest {
@@ -39,7 +29,12 @@ export interface AssignEmployeeRequest {
 
 }
 
-const BASE_URL = `${environment.baseUrl}/api/v1/projects`;
+const BASE_URL=`${environment.baseUrl}/api/v1/projects`
+
+const normalizeProject = (project: ProjectResponse): ProjectResponse => ({
+  ...project,
+  id: project.id || project._id || '',
+});
 
 @Injectable({
   providedIn: 'root',
@@ -47,118 +42,50 @@ const BASE_URL = `${environment.baseUrl}/api/v1/projects`;
 export class ProjectService {
 
   constructor(
-    private readonly client: HttpClient
-  ) {}
+    private readonly client:HttpClient
+  ){}
 
-  // GET ALL PROJECTS
-  getAllProjects = (
-    status?:
-      | 'PLANNED'
-      | 'ACTIVE'
-      | 'ON_HOLD'
-      | 'COMPLETED'
-      | 'CANCELLED'
-  ) => {
-
-    let params = new HttpParams();
-
-    if (status) {
-
-      params = params.set('status', status);
-
+  getAllProjects=(status?:'active'|'inactive')=>{
+    const path=`${BASE_URL}`
+    let param=new HttpParams()
+    if(status){
+      param=param.append("status",status)
     }
-
-    return this.client.get<ProjectResponse[]>(
-      BASE_URL,
-      {
-        params
-      }
-    );
-
-  };
-
-  // GET PROJECT BY ID
-  getProjectByID = (id: string) => {
-
-    return this.client.get<ProjectResponse>(
-      `${BASE_URL}/${id}`
-    );
-
-  };
-
-  // CREATE PROJECT
-  addProject = (reqBody: ProjectRequest) => {
-
-    return this.client.post<ProjectResponse>(
-      BASE_URL,
-      reqBody
-    );
-
-  };
-
-  // UPDATE PROJECT
-  updateProject = (
-    id: string,
-    reqBody: ProjectRequest
-  ) => {
-
-    return this.client.put<ProjectResponse>(
-      `${BASE_URL}/${id}`,
-      reqBody
-    );
-
-  };
-
-  // DELETE PROJECT
-  deleteProject = (id: string) => {
-
-    return this.client.delete<void>(
-      `${BASE_URL}/${id}`
-    );
-
-  };
-
-  // ASSIGN EMPLOYEE
-  assignEmployee = (
-    id: string,
-    reqBody: AssignEmployeeRequest
-  ) => {
-
-    return this.client.post<void>(
-      `${BASE_URL}/${id}/employees`,
-      reqBody
-    );
-
-  };
-
-  // REMOVE EMPLOYEE
-  removeEmployeeFromProject = (
-    projectId: string,
-    employeeId: string
-  ) => {
-
-    return this.client.delete<void>(
-      `${BASE_URL}/${projectId}/employees/${employeeId}`
-    );
-
-  };
-
-  // GET PROJECT EMPLOYEES
-  getProjectEmployees = (id: string) => {
-
-    return this.client.get<EmployeeResponse[]>(
-      `${BASE_URL}/${id}/employees`
-    );
-
-  };
-
-  // GET EMPLOYEE PROJECTS
-  getEmployeeAssignedProjects = (id: string) => {
-
-    return this.client.get<ProjectResponse[]>(
-      `${BASE_URL}/employee/${id}`
-    );
-
-  };
-
+    return this.client.get<ProjectResponse[]>(path,{
+      params:param
+    }).pipe(map((projects) => projects.map(normalizeProject)));
+  }
+  getProjectByID=(id:string)=>{
+    const path=`${BASE_URL}/${id}`
+    return this.client.get<ProjectResponse>(path).pipe(map(normalizeProject))
+  }
+  addProject=(reqBody:ProjectRequest)=>{
+    const path=`${BASE_URL}`
+    return this.client.post<ProjectResponse>(path,reqBody)
+  }
+  updateProject=(id:string,reqBody:ProjectRequest)=>{
+    const path=`${BASE_URL}/${id}`
+    return this.client.put<ProjectResponse>(path,reqBody)
+  }
+  deleteProject=(id:string)=>{
+    const path=`${BASE_URL}/${id}`
+    return this.client.delete<void>(path)
+  }
+  assignEmployee=(id:string,reqBody:AssignEmployeeRequest)=>{
+    const path=`${BASE_URL}/${id}/employees`
+    return this.client.post<void>(path,reqBody)
+  }
+  removeEmployeeFromProject=(project_id:string,employee_id:string)=>{
+    const path=`${BASE_URL}/${project_id}/employees/${employee_id}`
+    return this.client.delete<void>(path)
+  }
+  getProjectEmployees=(id:string)=>{
+    const path=`${BASE_URL}/${id}/employees`
+    return this.client.get<EmployeeResponse[]>(path)
+  }
+  getEmployeeAssignedProjects=(id:string)=>{
+    const path=`${BASE_URL}/employee/${id}`
+    return this.client.get<ProjectResponse[]>(path).pipe(map((projects) => projects.map(normalizeProject)))
+  }
 }
+

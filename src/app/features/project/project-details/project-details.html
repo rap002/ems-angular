@@ -1,68 +1,311 @@
-<div class="details-container">
+<div class="project-details-container" *ngIf="!isLoading; else loading">
 
-  <!-- LOADING -->
-  <div *ngIf="isLoading" class="loading">
-    Loading project details...
-  </div>
-
-  <!-- ERROR -->
-  <div *ngIf="errorMessage" class="error-alert">
+  <div *ngIf="errorMessage" class="alert alert-danger">
     {{ errorMessage }}
   </div>
 
-  <!-- PROJECT DETAILS -->
-  <div class="details-card" *ngIf="project && !isLoading">
+  <ng-container *ngIf="project; else noProject">
+    <div class="project-hero">
+      <div class="hero-left">
+        <div class="hero-avatar">
+          {{ project.name?.charAt(0) || 'P' }}
+        </div>
+        <div class="hero-copy">
+          <h1>{{ project.name }}</h1>
+          <div class="hero-meta">
+            <span class="hero-label">Project Details</span>
+            <span class="hero-badge" [ngClass]="project.status?.toLowerCase()">
+              {{ project.status || 'UNKNOWN' }}
+            </span>
+          </div>
+          <p class="hero-description">
+            {{ project.description || 'No description provided.' }}
+          </p>
+        </div>
+      </div>
 
-    <div class="details-header">
+      <div class="hero-actions">
+        <button class="btn btn-primary" (click)="onEdit()">Edit Project</button>
+        <button class="btn btn-danger" (click)="onDelete()">Delete Project</button>
+        <button class="btn btn-secondary" (click)="onBack()">Back</button>
+      </div>
+    </div>
 
-      <h2>Project Details</h2>
+    <!-- Project Summary -->
+    <div class="project-summary-card">
+      <div class="summary-grid">
+        <div class="summary-card summary-card--wide">
+          <span class="summary-label">Description</span>
+          <p class="summary-value">{{ project.description || 'No description provided.' }}</p>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Start Date</span>
+          <p class="summary-value">
+            {{ project.startDate ? (project.startDate | date:'MMM d, y') : 'N/A' }}
+          </p>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">End Date</span>
+          <p class="summary-value">
+            {{ project.endDate ? (project.endDate | date:'MMM d, y') : 'N/A' }}
+          </p>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Status</span>
+          <p class="summary-value">
+            <span class="status-pill" [ngClass]="project.status?.toLowerCase()">
+              {{ project.status || 'N/A' }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
 
-      <button
-        routerLink="/projects"
-        class="btn btn-secondary"
+    <!-- Employees Section -->
+    <div class="employees-section">
+
+      <div class="section-header">
+        <h3>
+          Assigned Employees ({{ employees.length || 0 }})
+        </h3>
+      </div>
+
+      <div class="assign-employee-panel">
+        <div class="assign-field">
+          <select
+            id="employeeSelect"
+            [(ngModel)]="selectedEmployeeId"
+          >
+            <option value="">Select employee</option>
+            <option
+              *ngFor="let employee of availableEmployees"
+              [value]="getEmployeeId(employee)"
+            >
+              {{ employee.firstName }} {{ employee.lastName }}
+            </option>
+          </select>
+        </div>
+
+        <button
+          class="btn btn-assign"
+          type="button"
+          [disabled]="isAssigningEmployee || !selectedEmployeeId"
+          (click)="onAssignEmployee()"
+        >
+          {{ isAssigningEmployee ? 'Assigning...' : 'Assign' }}
+        </button>
+      </div>
+
+      <div
+        *ngIf="employees && employees.length > 0; else noEmployees"
+        class="employees-list"
       >
-        Back
-      </button>
+
+        <div
+          class="employee-card"
+          *ngFor="let employee of employees"
+        >
+
+          <div class="employee-info">
+            <h4>
+              {{ employee?.firstName }}
+              {{ employee?.lastName }}
+            </h4>
+
+            <p class="employee-email">
+              {{ employee?.email }}
+            </p>
+
+            <p
+              class="employee-role"
+              *ngIf="employee?.departmentName"
+            >
+              {{ employee?.departmentName }}
+            </p>
+          </div>
+
+          <div class="employee-actions">
+
+            <button
+              class="btn btn-small btn-info"
+              (click)="viewEmployeeDetails(employee)"
+            >
+              View
+            </button>
+
+            <button
+              class="btn btn-small btn-danger"
+              (click)="onRemoveEmployee(employee)"
+            >
+              Remove
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- No Employees -->
+      <ng-template #noEmployees>
+        <div class="no-data">
+          <p *ngIf="isEmployeesLoading; else emptyEmployees">
+            Loading assigned employees...
+          </p>
+          <ng-template #emptyEmployees>
+            <p>No employees assigned to this project yet</p>
+          </ng-template>
+        </div>
+      </ng-template>
 
     </div>
 
-    <div class="details-grid">
+    <!-- Employee Modal -->
+    <div
+      class="modal-overlay"
+      *ngIf="showEmployeeModal"
+      (click)="closeEmployeeModal()"
+    >
 
-      <div class="detail-item">
-        <label>Project ID</label>
-        <p>{{ project.id }}</p>
+      <div
+        class="modal-content"
+        (click)="$event.stopPropagation()"
+      >
+
+        <div class="modal-header">
+          <h3>Employee Details</h3>
+
+          <button
+            class="close-btn"
+            (click)="closeEmployeeModal()"
+          >
+            &times;
+          </button>
+        </div>
+
+        <div
+          class="modal-body"
+          *ngIf="selectedEmployee"
+        >
+
+          <div class="employee-modal-avatar">
+            {{ selectedEmployee?.firstName?.charAt(0) }}
+            {{ selectedEmployee?.lastName?.charAt(0) }}
+          </div>
+
+          <div class="detail-row">
+            <label>Name:</label>
+
+            <span>
+              {{ selectedEmployee?.firstName }}
+              {{ selectedEmployee?.lastName }}
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <label>Email:</label>
+            <span>{{ selectedEmployee?.email }}</span>
+          </div>
+
+          <div
+            class="detail-row"
+            *ngIf="selectedEmployee?.phone"
+          >
+            <label>Phone:</label>
+            <span>{{ selectedEmployee?.phone }}</span>
+          </div>
+
+          <div
+            class="detail-row"
+            *ngIf="selectedEmployee?.departmentName"
+          >
+            <label>Department:</label>
+            <span>{{ selectedEmployee?.departmentName }}</span>
+          </div>
+
+          <div
+            class="detail-row"
+            *ngIf="selectedEmployee?.roleName"
+          >
+            <label>Role:</label>
+            <span>{{ selectedEmployee?.roleName }}</span>
+          </div>
+
+          <div
+            class="detail-row"
+            *ngIf="selectedEmployee?.status"
+          >
+            <label>Status:</label>
+
+            <span
+              class="modal-status-badge"
+              [ngClass]="selectedEmployee?.status?.toLowerCase()"
+            >
+              {{ selectedEmployee?.status }}
+            </span>
+          </div>
+
+          <div
+            class="detail-row"
+            *ngIf="selectedEmployee?.hireDate"
+          >
+            <label>Hire Date:</label>
+
+            <span>
+              {{
+                selectedEmployee?.hireDate
+                  | date:'MMM dd, yyyy'
+              }}
+            </span>
+          </div>
+
+          <div
+            class="detail-row"
+            *ngIf="selectedEmployee?.salary"
+          >
+            <label>Salary:</label>
+
+            <span>
+              {{
+                selectedEmployee?.salary
+                  | currency:'USD'
+              }}
+            </span>
+          </div>
+
+        </div>
       </div>
 
-      <div class="detail-item">
-        <label>Project Name</label>
-        <p>{{ project.name }}</p>
-      </div>
+    </div>
 
-      <div class="detail-item full-width">
-        <label>Description</label>
-        <p>{{ project.description }}</p>
-      </div>
+  </ng-container>
+</div>
 
-      <div class="detail-item">
-        <label>Start Date</label>
-        <p>{{ project.startDate }}</p>
-      </div>
+<!-- No Project -->
+<ng-template #noProject>
 
-      <div class="detail-item">
-        <label>End Date</label>
-        <p>{{ project.endDate }}</p>
-      </div>
+  <div class="project-details-container">
 
-      <div class="detail-item">
-        <label>Status</label>
+    <div class="alert alert-danger">
+      {{ errorMessage || 'Project details are not available.' }}
+    </div>
 
-        <span class="status-badge">
-          {{ project.status }}
-        </span>
-      </div>
-
+    <div class="action-buttons">
+      <button
+        class="btn btn-secondary"
+        (click)="onBack()"
+      >
+        Back
+      </button>
     </div>
 
   </div>
 
-</div>
+</ng-template>
+
+<!-- Loading -->
+<ng-template #loading>
+
+  <div class="loading-container">
+    <p>Loading project details...</p>
+  </div>
+
+</ng-template>

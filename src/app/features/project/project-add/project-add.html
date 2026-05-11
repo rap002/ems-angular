@@ -1,12 +1,17 @@
-<div class="project-add-container">
-  <div class="project-add-card">
-    <h2>Add New Project</h2>
+<div class="form-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>{{ isEditMode ? 'Edit Project' : 'Create New Project' }}</h2>
+      <p class="subtitle">
+        {{ isEditMode ? 'Update the project details and save your changes.' : 'Enter the project details and click Add Project.' }}
+      </p>
+    </div>
 
     <div *ngIf="successMessage" class="alert alert-success">
       {{ successMessage }}
     </div>
 
-    <div *ngIf="errorMessage" class="alert alert-danger">
+    <div *ngIf="errorMessage" class="alert error-alert">
       {{ errorMessage }}
     </div>
 
@@ -37,7 +42,7 @@
         ></textarea>
         <div *ngIf="description?.invalid && description?.touched" class="error-message">
           <span *ngIf="description?.errors?.['required']">Description is required</span>
-          <span *ngIf="description?.errors?.['minlength']">Minimum 10 characters required</span>
+          <span *ngIf="description?.errors?.['minlength']">Minimum 5 characters required</span>
         </div>
       </div>
 
@@ -56,27 +61,22 @@
         </div>
 
         <div class="form-group">
-          <label for="endDate">End Date <span class="required">*</span></label>
+          <label for="endDate">End Date <span class="optional">(optional)</span></label>
           <input
             type="date"
             id="endDate"
             formControlName="endDate"
             class="form-control"
           />
-          <div *ngIf="endDate?.invalid && endDate?.touched" class="error-message">
-            End date is required
-          </div>
         </div>
       </div>
 
       <div class="form-group">
         <label for="status">Status <span class="required">*</span></label>
         <select id="status" formControlName="status" class="form-control">
-          <option value="PLANNED">Planned</option>
-          <option value="ACTIVE">Active</option>
-          <option value="ON_HOLD">On Hold</option>
-          <option value="COMPLETED">Completed</option>
-          <option value="CANCELLED">Cancelled</option>
+          <option *ngFor="let option of statusOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
         </select>
       </div>
 
@@ -86,8 +86,8 @@
           class="btn btn-primary"
           [disabled]="isLoading || projectForm.invalid"
         >
-          <span *ngIf="!isLoading">Add Project</span>
-          <span *ngIf="isLoading">Adding...</span>
+          <span *ngIf="!isLoading">{{ isEditMode ? 'Update Project' : 'Add Project' }}</span>
+          <span *ngIf="isLoading">{{ isEditMode ? 'Updating...' : 'Adding...' }}</span>
         </button>
         <button type="button" class="btn btn-secondary" (click)="onReset()">
           Reset

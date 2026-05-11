@@ -1,24 +1,27 @@
 .table-container {
-  padding: 20px;
+  padding: 10px;
 }
 
 .table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .header-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .search-input {
-  padding: 10px;
+  padding: 8px 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  width: 250px;
+  width: 200px;
 }
 
 table {
@@ -29,21 +32,52 @@ table {
 
 th,
 td {
-  padding: 14px;
-  border-bottom: 1px solid #ddd;
+  padding: 10px 10px;
+  border-bottom: 1px solid #eee;
   text-align: left;
+  vertical-align: middle;
+}
+
+tbody tr {
+  transition: background 0.15s ease;
+}
+
+tbody tr:hover {
+  background: #fafafa;
 }
 
 .actions {
   display: flex;
-  gap: 10px;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 .btn {
-  padding: 8px 14px;
+  padding: 6px 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 0.85rem;
+  min-width: 72px;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn-block {
+  width: auto;
+  text-align: center;
 }
 
 .btn-primary {
@@ -51,19 +85,50 @@ td {
   color: white;
 }
 
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-view {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+}
+
+.btn-view:hover:not(:disabled) {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff;
+}
+
 .btn-edit {
-  background: #f59e0b;
-  color: white;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fbbf24;
+}
+
+.btn-edit:hover:not(:disabled) {
+  background: #d97706;
+  border-color: #d97706;
+  color: #ffffff;
 }
 
 .btn-delete {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.btn-delete:hover:not(:disabled) {
   background: #dc2626;
-  color: white;
+  border-color: #dc2626;
+  color: #ffffff;
 }
 
 .status-badge {
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 5px 10px;
+  border-radius: 16px;
   background: #dcfce7;
   color: #166534;
+  font-size: 0.85rem;
 }

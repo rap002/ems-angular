@@ -153,22 +153,20 @@ export const routes: Routes = [
     canActivate: [guardInterceptorGuard]
   },
 
-  // UPDATE PROJECT
-  {
-    path: 'projects/update/:id',
-    component: ProjectAddComponent,
-    canActivate: [guardInterceptorGuard]
-  },
+  { path: 'departments', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
+  { path: 'departments/add', component: DepartmentAdd, canActivate: [guardInterceptorGuard] },
+  { path: 'departments/edit/:id', component: DepartmentAdd, canActivate: [guardInterceptorGuard] },
+  { path: 'departments/:id', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
 
-  // =========================
-  // ROLES
-  // =========================
-  {
-    path: 'roles',
-    loadComponent: () =>
-      import('./features/role/role-list/role-list')
-        .then(m => m.RoleList),
-    canActivate: [guardInterceptorGuard]
+  { path: 'projects', component: ProjectDeleteUpdate, canActivate: [guardInterceptorGuard] },
+  { path: 'projects/create', redirectTo: '/projects/add', pathMatch: 'full' },
+  { path: 'projects/add', component: ProjectAddComponent, canActivate: [guardInterceptorGuard] },
+  { path: 'projects/update/:id', component: ProjectAddComponent, canActivate: [guardInterceptorGuard] },
+  { path: 'projects/:id', component: ProjectDetailsComponent, canActivate: [guardInterceptorGuard] },
+  { 
+    path: 'roles', 
+    loadComponent: () => import('./features/role/role-list/role-list').then(m => m.RoleList), 
+    canActivate: [guardInterceptorGuard] 
   },
 
   {
