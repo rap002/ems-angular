@@ -43,19 +43,25 @@
           <label for="status">Status</label>
           <select id="status" formControlName="status">
             <option value="ACTIVE">Active</option>
-            <option value="ON_LEAVE">On Leave</option>
+            <option value="INACTIVE">Inactive</option>
             <option value="TERMINATED">Terminated</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="departmentName">Department</label>
-          <input id="departmentName" type="text" formControlName="departmentName" placeholder="e.g. Engineering">
+          <label for="departmentId">Department</label>
+          <select id="departmentId" formControlName="departmentId">
+            <option value="">Select Department</option>
+            <option *ngFor="let dept of departments()" [value]="dept.id">{{ dept.name }}</option>
+          </select>
         </div>
 
         <div class="form-group">
-          <label for="roleName">Job Role</label>
-          <input id="roleName" type="text" formControlName="roleName" placeholder="e.g. Software Engineer">
+          <label for="roleId">Job Role</label>
+          <select id="roleId" formControlName="roleId">
+            <option value="">Select Role</option>
+            <option *ngFor="let role of roles()" [value]="role.id">{{ role.name }}</option>
+          </select>
         </div>
       </div>
 

@@ -16,6 +16,10 @@ export class Header {
 
   isLoggedIn = isLoggedIn;
 
+  isAdmin() {
+    return this.authService.isAdmin();
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
