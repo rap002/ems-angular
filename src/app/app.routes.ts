@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { EmployeeList } from './features/employee/employee-list/employee-list';
 import { Login } from './features/auth/login/login';
 import { Home } from './features/home/home';
+import { Welcome } from './features/welcome/welcome';
 import { DepartmentDetails } from './features/department/department-details/department-details';
 import { DepartmentAdd } from './features/department/department-add/department-add';
 import { ProjectDetailsComponent } from './features/project/project-details/project-details';
@@ -12,6 +13,7 @@ import { guardInterceptorGuard } from './guard/guard-interceptor-guard';
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'home', component: Home, canActivate: [guardInterceptorGuard] },
+  { path: 'welcome', component: Welcome },
 
   { path: 'employees', component: EmployeeList, canActivate: [guardInterceptorGuard] },
   {
@@ -58,5 +60,5 @@ export const routes: Routes = [
     canActivate: [guardInterceptorGuard] 
   },
 
-  { path: '', redirectTo: '/home', pathMatch: 'full' }
+  { path: '', component: Welcome, pathMatch: 'full' }
 ];

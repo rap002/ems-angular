@@ -1,0 +1,45 @@
+<div class="landing-page">
+  <!-- Minimalist Landing Header -->
+  <header class="landing-header">
+    <!-- <div class="header-left">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM" class="logo-img">
+    </div> -->
+    <!-- <nav class="header-center">
+      <a href="#" class="nav-item active">HOME</a>
+      <a href="#" class="nav-item">ABOUT US</a>
+      <a href="#" class="nav-item">CONTACT US</a>
+      <a href="#" class="nav-item">FAQ</a>
+    </nav> -->
+    <!-- <div class="header-right">
+      <button *ngIf="!isLoggedIn()" routerLink="/login" class="btn-signin">SIGN IN</button>
+      <button *ngIf="isLoggedIn()" routerLink="/home" class="btn-signin">DASHBOARD</button>
+    </div> -->
+  </header>
+
+  <main class="hero-section">
+    <!-- Abstract Blurred Background Elements -->
+    <div class="abstract-bg">
+      <div class="blur-blob blob-1"></div>
+      <div class="blur-blob blob-2"></div>
+    </div>
+
+    <div class="content-wrapper">
+      <h1 class="welcome-text">WELCOME</h1>
+      <p class="description">
+        Enterprise Management System for the modern workspace. 
+        Streamline your operations, manage your teams, and grow your organization 
+        with the power of IBM technology.
+      </p>
+      
+      <div class="cta-group">
+        <button [routerLink]="isLoggedIn() ? '/home' : '/login'" class="btn-get-started">
+          {{ isLoggedIn() ? 'GO TO HOME' : 'GET STARTED' }}
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="landing-footer">
+    © 2026 IBM Enterprise Management System. All rights reserved.
+  </footer>
+</div>
