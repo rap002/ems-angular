@@ -54,10 +54,19 @@ export class ProjectDeleteUpdate implements OnInit {
   }
 
   editProject(id: string) {
-    this.router.navigate(['/projects/update', id]);
+    if (!id) return;
+    const project = this.projects().find((item) => this.getProjectId(item) === id);
+    this.router.navigate(['/projects/update', id], { state: { project } });
+  }
+
+  viewProject(id: string) {
+    if (!id) return;
+    const project = this.projects().find((item) => this.getProjectId(item) === id);
+    this.router.navigate(['/projects', id], { state: { project } });
   }
 
   deleteProject(id: string) {
+    if (!id) return;
     const confirmed = confirm('Are you sure you want to delete this project?');
 
     if (!confirmed) return;
@@ -70,5 +79,9 @@ export class ProjectDeleteUpdate implements OnInit {
         alert('Failed to delete project');
       },
     });
+  }
+
+  getProjectId(project: ProjectResponse): string {
+    return (project as any).id || (project as any)._id || '';
   }
 }

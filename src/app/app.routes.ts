@@ -41,9 +41,10 @@ export const routes: Routes = [
   { path: 'departments/:id', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
 
   { path: 'projects', component: ProjectDeleteUpdate, canActivate: [guardInterceptorGuard] },
+  { path: 'projects/create', redirectTo: '/projects/add', pathMatch: 'full' },
   { path: 'projects/add', component: ProjectAddComponent, canActivate: [guardInterceptorGuard] },
-  { path: 'projects/:id', component: ProjectDetailsComponent, canActivate: [guardInterceptorGuard] },
   { path: 'projects/update/:id', component: ProjectAddComponent, canActivate: [guardInterceptorGuard] },
+  { path: 'projects/:id', component: ProjectDetailsComponent, canActivate: [guardInterceptorGuard] },
   { 
     path: 'roles', 
     loadComponent: () => import('./features/role/role-list/role-list').then(m => m.RoleList), 

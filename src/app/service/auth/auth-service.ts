@@ -10,6 +10,30 @@ export interface TokenResponse {
   username: string;
 }
 const BASE_URL=environment.baseUrl+"/api/v1/auth"
+const AUTH_KEY = "auth";
+
+export const getAuthToken = (): string | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
+};
+
+const setAuthToken = (token: string) => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(AUTH_KEY, token);
+    sessionStorage.setItem(AUTH_KEY, token);
+  }
+};
+
+const clearAuthToken = () => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(AUTH_KEY);
+    sessionStorage.removeItem(AUTH_KEY);
+  }
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -23,11 +47,9 @@ export class AuthService {
   }
 
   private restoreRoles() {
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      const token = sessionStorage.getItem("auth");
-      if (token) {
-        this.userRoles = this.extractRolesFromToken(token);
-      }
+    const token = getAuthToken();
+    if (token) {
+      this.userRoles = this.extractRolesFromToken(token);
     }
   }
 
@@ -52,25 +74,18 @@ export class AuthService {
         "password": password
       }).pipe(
       map((val)=>{
-        if (typeof window !== 'undefined' && window.sessionStorage) {
-          sessionStorage.setItem("auth",val.token)
-          this.userRoles = this.extractRolesFromToken(val.token);
-        }
+        setAuthToken(val.token);
+        this.userRoles = this.extractRolesFromToken(val.token);
         return val
       })
     )
   }
 
   logout = () => {
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      sessionStorage.removeItem("auth");
-      this.userRoles = [];
-    }
+    clearAuthToken();
+    this.userRoles = [];
   }
 }
 export const isLoggedIn=()=>{
-  if (typeof window !== 'undefined' && window.sessionStorage) {
-    if (sessionStorage.getItem("auth")){ return true}
-  }
-  return false
+  return !!getAuthToken();
 }

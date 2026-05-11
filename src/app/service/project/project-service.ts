@@ -1,19 +1,20 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { get } from 'http';
 import { EmployeeResponse } from '../employee/employee-service';
+import { map } from 'rxjs/operators';
 export interface ProjectRequest {
   name: string;
   description: string;
 
   startDate: string; // yyyy-MM-dd
-  endDate: string;   // yyyy-MM-dd
+  endDate?: string;   // yyyy-MM-dd
 
-  status: 'active'|'inactive';
+  status: 'PLANNED' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';
 }
 export interface ProjectResponse extends ProjectRequest{
   id: string;
+  _id?: string;
 }
 
 export interface AssignEmployeeRequest {
@@ -23,6 +24,12 @@ export interface AssignEmployeeRequest {
 }
 
 const BASE_URL=`${environment.baseUrl}/api/v1/projects`
+
+const normalizeProject = (project: ProjectResponse): ProjectResponse => ({
+  ...project,
+  id: project.id || project._id || '',
+});
+
 @Injectable({
   providedIn: 'root',
 })
@@ -39,11 +46,11 @@ export class ProjectService {
     }
     return this.client.get<ProjectResponse[]>(path,{
       params:param
-    });
+    }).pipe(map((projects) => projects.map(normalizeProject)));
   }
   getProjectByID=(id:string)=>{
     const path=`${BASE_URL}/${id}`
-    return this.client.get<ProjectResponse>(path)
+    return this.client.get<ProjectResponse>(path).pipe(map(normalizeProject))
   }
   addProject=(reqBody:ProjectRequest)=>{
     const path=`${BASE_URL}`
@@ -71,6 +78,7 @@ export class ProjectService {
   }
   getEmployeeAssignedProjects=(id:string)=>{
     const path=`${BASE_URL}/employee/${id}`
-    return this.client.get<ProjectResponse[]>(path)
+    return this.client.get<ProjectResponse[]>(path).pipe(map((projects) => projects.map(normalizeProject)))
   }
 }
+
