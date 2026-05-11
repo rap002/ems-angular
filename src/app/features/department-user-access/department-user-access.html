@@ -1,0 +1,43 @@
+<div class="department-user-container">
+  <div class="header">
+    <h1>Departments</h1>
+    <p class="subtitle">View available company departments</p>
+  </div>
+
+  <div *ngIf="accessDenied()" class="access-denied">
+    <h2>Access Denied</h2>
+    <p>This page is only available for users.</p>
+  </div>
+
+  <ng-container *ngIf="!accessDenied()">
+    <div *ngIf="loading()" class="loading">
+      Loading departments...
+    </div>
+
+    <div *ngIf="error()" class="error">
+      {{ error() }}
+    </div>
+
+    <div class="department-grid" *ngIf="!loading() && !error()">
+      <div class="department-card" *ngFor="let department of departments()">
+        <div class="card-top">
+          <span class="department-icon">
+            {{ department.name.charAt(0).toUpperCase() }}
+          </span>
+          <div>
+            <h2>{{ department.name }}</h2>
+            <p class="department-id">ID: {{ department.id }}</p>
+          </div>
+        </div>
+
+        <p class="description">
+          {{ department.description }}
+        </p>
+      </div>
+
+      <div *ngIf="departments().length === 0" class="empty-state">
+        No departments found.
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -32,6 +32,7 @@ export const routes: Routes = [
 
   { path: 'departments', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
   { path: 'departments/add', component: DepartmentAdd, canActivate: [guardInterceptorGuard] },
+  { path: 'departments/edit/:id', component: DepartmentAdd, canActivate: [guardInterceptorGuard] },
   { path: 'departments/:id', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
 
   { 

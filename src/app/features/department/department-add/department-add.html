@@ -1,7 +1,9 @@
 <div class="department-add-container">
   <div class="header">
-    <h1>Add Department</h1>
-    <p class="subtitle">Create a new company department</p>
+    <h1>{{ isEditMode ? 'Edit Department' : 'Add Department' }}</h1>
+    <p class="subtitle">
+      {{ isEditMode ? 'Update department information' : 'Create a new company department' }}
+    </p>
   </div>
 
   <div class="form-card">
@@ -44,7 +46,11 @@
           class="btn btn-primary"
           [disabled]="loading()"
         >
-          {{ loading() ? 'Adding...' : 'Add Department' }}
+          {{
+            loading()
+              ? (isEditMode ? 'Updating...' : 'Adding...')
+              : (isEditMode ? 'Update Department' : 'Add Department')
+          }}
         </button>
 
         <button
@@ -54,6 +60,15 @@
           [disabled]="loading()"
         >
           Reset
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="cancel()"
+          [disabled]="loading()"
+        >
+          Cancel
         </button>
       </div>
     </form>

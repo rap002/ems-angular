@@ -39,13 +39,31 @@
             <td>{{ department.name }}</td>
             <td>{{ department.description }}</td>
             <td>
-              <button
-                type="button"
-                class="btn btn-outline"
-                (click)="loadDepartmentById(department.id)"
-              >
-                View Details
-              </button>
+              <div class="action-buttons">
+                <button
+                  type="button"
+                  class="btn btn-outline"
+                  (click)="loadDepartmentById(department.id)"
+                >
+                  View
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-edit"
+                  [routerLink]="['/departments/edit', department.id]"
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-delete"
+                  (click)="deleteDepartment(department.id)"
+                >
+                  Delete
+                </button>
+              </div>
             </td>
           </tr>
 
