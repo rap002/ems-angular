@@ -32,6 +32,13 @@
           <a *ngIf="isAdmin()" routerLink="/projects/add" routerLinkActive="active">Add New Project</a>
         </div>
       </div>
+      <div class="dropdown" *ngIf="isAdmin()">
+        <button class="dropbtn">Roles</button>
+        <div class="dropdown-content">
+          <a routerLink="/roles" routerLinkActive="active">View Roles</a>
+          <a routerLink="/roles/add" routerLinkActive="active">Add Role</a>
+        </div>
+      </div>
 
       <button (click)="logout()" class="btn-logout">Logout</button>
     </nav>

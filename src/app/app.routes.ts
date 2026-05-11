@@ -42,6 +42,21 @@ export const routes: Routes = [
   { path: 'projects/add', component: ProjectAddComponent, canActivate: [guardInterceptorGuard] },
   { path: 'projects/:id', component: ProjectDetailsComponent, canActivate: [guardInterceptorGuard] },
   { path: 'projects/update/:id', component: ProjectAddComponent, canActivate: [guardInterceptorGuard] },
+  { 
+    path: 'roles', 
+    loadComponent: () => import('./features/role/role-list/role-list').then(m => m.RoleList), 
+    canActivate: [guardInterceptorGuard] 
+  },
+  { 
+    path: 'roles/add', 
+    loadComponent: () => import('./features/role/role-form/role-form').then(m => m.RoleForm), 
+    canActivate: [guardInterceptorGuard] 
+  },
+  { 
+    path: 'roles/edit/:id', 
+    loadComponent: () => import('./features/role/role-form/role-form').then(m => m.RoleForm), 
+    canActivate: [guardInterceptorGuard] 
+  },
 
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
