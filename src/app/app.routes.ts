@@ -4,6 +4,9 @@ import { Login } from './features/auth/login/login';
 import { Home } from './features/home/home';
 import { DepartmentDetails } from './features/department/department-details/department-details';
 import { DepartmentAdd } from './features/department/department-add/department-add';
+import { ProjectDetailsComponent } from './features/project/project-details/project-details';
+import { ProjectAddComponent } from './features/project/project-add/project-add';
+import { ProjectDeleteUpdate } from './features/project/project-delete-update/project-delete-update';
 import { guardInterceptorGuard } from './guard/guard-interceptor-guard';
 
 export const routes: Routes = [
@@ -35,21 +38,10 @@ export const routes: Routes = [
   { path: 'departments/edit/:id', component: DepartmentAdd, canActivate: [guardInterceptorGuard] },
   { path: 'departments/:id', component: DepartmentDetails, canActivate: [guardInterceptorGuard] },
 
-  { 
-    path: 'roles', 
-    loadComponent: () => import('./features/role/role-list/role-list').then(m => m.RoleList), 
-    canActivate: [guardInterceptorGuard] 
-  },
-  { 
-    path: 'roles/add', 
-    loadComponent: () => import('./features/role/role-form/role-form').then(m => m.RoleForm), 
-    canActivate: [guardInterceptorGuard] 
-  },
-  { 
-    path: 'roles/edit/:id', 
-    loadComponent: () => import('./features/role/role-form/role-form').then(m => m.RoleForm), 
-    canActivate: [guardInterceptorGuard] 
-  },
+  { path: 'projects', component: ProjectDeleteUpdate, canActivate: [guardInterceptorGuard] },
+  { path: 'projects/add', component: ProjectAddComponent, canActivate: [guardInterceptorGuard] },
+  { path: 'projects/:id', component: ProjectDetailsComponent, canActivate: [guardInterceptorGuard] },
+  { path: 'projects/update/:id', component: ProjectAddComponent, canActivate: [guardInterceptorGuard] },
 
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];

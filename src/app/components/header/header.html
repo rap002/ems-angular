@@ -25,11 +25,11 @@
         </div>
       </div>
 
-      <div class="dropdown" *ngIf="isAdmin()">
-        <button class="dropbtn">Roles</button>
+      <div class="dropdown">
+        <button class="dropbtn">Projects</button>
         <div class="dropdown-content">
-          <a routerLink="/roles" routerLinkActive="active">View Roles</a>
-          <a routerLink="/roles/add" routerLinkActive="active">Add Role</a>
+          <a routerLink="/projects" routerLinkActive="active">View Projects</a>
+          <a *ngIf="isAdmin()" routerLink="/projects/add" routerLinkActive="active">Add New Project</a>
         </div>
       </div>
 
