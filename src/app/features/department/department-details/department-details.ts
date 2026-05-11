@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import {
   DepartmentResponse,
   DepartmentService
@@ -9,7 +9,7 @@ import {
 @Component({
   selector: 'app-department-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './department-details.html',
   styleUrl: './department-details.css',
 })
@@ -70,6 +70,34 @@ export class DepartmentDetails implements OnInit {
         this.selectedDepartment.set(null);
         this.detailsLoading.set(false);
         console.error('Error loading department by id:', err);
+      }
+    });
+  }
+
+  deleteDepartment(id: string): void {
+    if (!confirm('Are you sure you want to delete this department?')) {
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set('');
+
+    this.departmentService.deleteDepartment(id).subscribe({
+      next: () => {
+        this.departments.update((departments) =>
+          departments.filter((department) => department.id !== id)
+        );
+
+        if (this.selectedDepartment()?.id === id) {
+          this.selectedDepartment.set(null);
+        }
+
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set('Failed to delete department. Please try again.');
+        this.loading.set(false);
+        console.error('Error deleting department:', err);
       }
     });
   }
