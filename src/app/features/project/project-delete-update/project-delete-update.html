@@ -1,8 +1,11 @@
 <div class="table-container">
+
   <div class="table-header">
-    <h2>Project</h2>
+
+    <h2>Projects</h2>
 
     <div class="header-actions">
+
       <input
         type="text"
         [(ngModel)]="searchText"
@@ -11,17 +14,30 @@
         class="search-input"
       />
 
+      <!-- FIXED ROUTE -->
       <button
-        routerLink="/projects/create"
+        routerLink="/projects/add"
         class="btn btn-primary"
       >
         Create Project
       </button>
+
     </div>
+
   </div>
 
-  <table>
+  <div *ngIf="loading">
+    Loading projects...
+  </div>
+
+  <div *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <table *ngIf="!loading && filteredProjects().length > 0">
+
     <thead>
+
       <tr>
         <th>Name</th>
         <th>Description</th>
@@ -30,29 +46,42 @@
         <th>Status</th>
         <th>Actions</th>
       </tr>
+
     </thead>
 
     <tbody>
+
       <tr *ngFor="let project of filteredProjects()">
+
         <td>{{ project.name }}</td>
+
         <td>{{ project.description }}</td>
+
         <td>{{ project.startDate }}</td>
+
         <td>{{ project.endDate }}</td>
 
         <td>
+
           <span class="status-badge">
+
             {{ project.status }}
+
           </span>
+
         </td>
 
         <td class="actions">
+
+          <!-- DETAILS -->
           <button
             class="btn btn-primary"
-            [routerLink]="['/projects/details', project.id]"
+            [routerLink]="['/projects', project.id]"
           >
             Details
           </button>
 
+          <!-- UPDATE -->
           <button
             class="btn btn-edit"
             (click)="editProject(project.id)"
@@ -60,14 +89,20 @@
             Update
           </button>
 
+          <!-- DELETE -->
           <button
             class="btn btn-delete"
             (click)="deleteProject(project.id)"
           >
             Delete
           </button>
+
         </td>
+
       </tr>
+
     </tbody>
+
   </table>
+
 </div>

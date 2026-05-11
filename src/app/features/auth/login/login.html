@@ -1,47 +1,179 @@
-<div class="login-container">
-  <div class="login-card">
-    <div class="login-header">
-      <h1>Welcome Back</h1>
-      <p>Please enter your details to sign in</p>
+<div class="login-page">
+
+  <!-- BACKGROUND BLOBS -->
+  <div class="background-blobs">
+
+    <div class="blob blob-1"></div>
+
+    <div class="blob blob-2"></div>
+
+  </div>
+
+  <div class="login-wrapper">
+
+    <!-- LEFT SIDE -->
+    <div class="login-left">
+
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+        alt="IBM Logo"
+        class="ibm-logo"
+      />
+
+      <div class="left-content">
+
+        <span class="platform-badge">
+          IBM Enterprise Platform
+        </span>
+
+        <h1>
+          Workforce Management <br />
+          Reimagined
+        </h1>
+
+        <p>
+          Securely manage employees, departments,
+          analytics, and enterprise workflows
+          with a modern workforce platform.
+        </p>
+
+        <div class="feature-list">
+
+          <div class="feature-item">
+            ✓ Enterprise Security
+          </div>
+
+          <div class="feature-item">
+            ✓ Employee Management
+          </div>
+
+          <div class="feature-item">
+            ✓ Real-Time Analytics
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div *ngIf="error" class="error-message">
-        {{ error }}
-      </div>
+    <!-- RIGHT SIDE -->
+    <div class="login-right">
 
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          formControlName="username"
-          placeholder="Enter your username"
-          [class.invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
-        />
-        <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="field-error">
-          Username is required
+      <div class="login-card">
+
+        <div class="login-header">
+
+          <h2>Welcome Back</h2>
+
+          <p>
+            Sign in to continue to IBM EMS
+          </p>
+
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          formControlName="password"
-          placeholder="Enter your password"
-          [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-        />
-        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="field-error">
-          Password is required
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="onSubmit()"
+        >
+
+          <!-- ERROR -->
+          <div
+            *ngIf="error"
+            class="error-message"
+          >
+            {{ error }}
+          </div>
+
+          <!-- USERNAME -->
+          <div class="form-group">
+
+            <label>
+              Username
+            </label>
+
+            <input
+              type="text"
+              formControlName="username"
+              placeholder="Enter your username"
+              [class.invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+            />
+
+            <div
+              *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+              class="field-error"
+            >
+              Username is required
+            </div>
+
+          </div>
+
+          <!-- PASSWORD -->
+          <div class="form-group">
+
+            <label>
+              Password
+            </label>
+
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="Enter your password"
+              [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            />
+
+            <div
+              *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+              class="field-error"
+            >
+              Password is required
+            </div>
+
+          </div>
+
+          <!-- BUTTON -->
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid || loading"
+            class="login-button"
+          >
+
+            <span *ngIf="!loading">
+              Sign In
+            </span>
+
+            <span
+              *ngIf="loading"
+              class="spinner"
+            ></span>
+
+          </button>
+
+        </form>
+
+        <!-- DEMO USERS -->
+        <div class="demo-users">
+
+          <h4>
+            Demo Access
+          </h4>
+
+          <div class="demo-box">
+            <strong>Admin:</strong>
+            admin / admin123
+          </div>
+
+          <div class="demo-box">
+            <strong>Employee:</strong>
+            emp101 / password
+          </div>
+
         </div>
+
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid || loading" class="login-button">
-        <span *ngIf="!loading">Sign In</span>
-        <span *ngIf="loading" class="spinner"></span>
-      </button>
-    </form>
+    </div>
+
   </div>
+
 </div>

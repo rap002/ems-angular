@@ -1,6 +1,20 @@
 <div class="details-container">
-  <div class="details-card" *ngIf="project">
+
+  <!-- LOADING -->
+  <div *ngIf="isLoading" class="loading">
+    Loading project details...
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="errorMessage" class="error-alert">
+    {{ errorMessage }}
+  </div>
+
+  <!-- PROJECT DETAILS -->
+  <div class="details-card" *ngIf="project && !isLoading">
+
     <div class="details-header">
+
       <h2>Project Details</h2>
 
       <button
@@ -9,9 +23,11 @@
       >
         Back
       </button>
+
     </div>
 
     <div class="details-grid">
+
       <div class="detail-item">
         <label>Project ID</label>
         <p>{{ project.id }}</p>
@@ -44,23 +60,9 @@
           {{ project.status }}
         </span>
       </div>
+
     </div>
 
-    <div class="action-buttons">
-      <button
-        class="btn btn-primary"
-        [routerLink]="['/projects/update', project.id]"
-      >
-        Update Project
-      </button>
-    </div>
   </div>
 
-  <div *ngIf="isLoading" class="loading">
-    Loading project details...
-  </div>
-
-  <div *ngIf="errorMessage" class="error-alert">
-    {{ errorMessage }}
-  </div>
 </div>

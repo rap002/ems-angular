@@ -1,45 +1,193 @@
 <div class="landing-page">
-  <!-- Minimalist Landing Header -->
+
+  <!-- HEADER -->
   <header class="landing-header">
-    <!-- <div class="header-left">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM" class="logo-img">
-    </div> -->
-    <!-- <nav class="header-center">
-      <a href="#" class="nav-item active">HOME</a>
-      <a href="#" class="nav-item">ABOUT US</a>
-      <a href="#" class="nav-item">CONTACT US</a>
-      <a href="#" class="nav-item">FAQ</a>
-    </nav> -->
-    <!-- <div class="header-right">
-      <button *ngIf="!isLoggedIn()" routerLink="/login" class="btn-signin">SIGN IN</button>
-      <button *ngIf="isLoggedIn()" routerLink="/home" class="btn-signin">DASHBOARD</button>
-    </div> -->
+
+    <div class="logo-section">
+
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+        alt="IBM Logo"
+        class="logo-img"
+      />
+
+      <span class="logo-text">
+        Enterprise Management System
+      </span>
+
+    </div>
+
+    <nav class="header-nav">
+
+      <a href="#">Home</a>
+
+      <a href="#">Features</a>
+
+      <a href="#">About</a>
+
+      <a href="#">Contact</a>
+
+    </nav>
+
+    <div class="header-actions">
+
+      <button
+        *ngIf="!isLoggedIn()"
+        routerLink="/login"
+        class="btn-login"
+      >
+        Login
+      </button>
+
+      <button
+        *ngIf="isLoggedIn()"
+        routerLink="/home"
+        class="btn-dashboard"
+      >
+        Dashboard
+      </button>
+
+    </div>
+
   </header>
 
-  <main class="hero-section">
-    <!-- Abstract Blurred Background Elements -->
+  <!-- HERO -->
+  <section class="hero-section">
+
+    <!-- BACKGROUND -->
     <div class="abstract-bg">
+
       <div class="blur-blob blob-1"></div>
+
       <div class="blur-blob blob-2"></div>
+
     </div>
 
-    <div class="content-wrapper">
-      <h1 class="welcome-text">WELCOME</h1>
-      <p class="description">
-        Enterprise Management System for the modern workspace. 
-        Streamline your operations, manage your teams, and grow your organization 
-        with the power of IBM technology.
-      </p>
-      
-      <div class="cta-group">
-        <button [routerLink]="isLoggedIn() ? '/home' : '/login'" class="btn-get-started">
-          {{ isLoggedIn() ? 'GO TO HOME' : 'GET STARTED' }}
-        </button>
+    <div class="hero-content">
+
+      <div class="badge">
+        IBM Powered Workforce Platform
       </div>
-    </div>
-  </main>
 
+      <h1 class="hero-title">
+        Modern Enterprise <br />
+        Management System
+      </h1>
+
+      <p class="hero-description">
+
+        Securely manage employees, departments,
+        analytics, and enterprise operations
+        with a modern workforce platform.
+
+      </p>
+
+      <div class="hero-buttons">
+
+        <button
+          [routerLink]="isLoggedIn() ? '/home' : '/login'"
+          class="primary-btn"
+        >
+
+          {{ isLoggedIn() ? 'Go To Dashboard' : 'Get Started' }}
+
+        </button>
+
+        <button class="secondary-btn">
+          Learn More
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section">
+
+    <div class="feature-card">
+
+      <h3>Employee Management</h3>
+
+      <p>
+        Manage workforce records efficiently
+        and securely.
+      </p>
+
+    </div>
+
+    <div class="feature-card">
+
+      <h3>Secure Authentication</h3>
+
+      <p>
+        Enterprise-grade login system
+        with secure access control.
+      </p>
+
+    </div>
+
+    <div class="feature-card">
+
+      <h3>Analytics Dashboard</h3>
+
+      <p>
+        Track employee performance
+        and organization growth.
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section">
+
+    <div class="stat-box">
+
+      <h2 *ngIf="!loading">
+        {{ totalEmployees }}
+      </h2>
+
+      <h2 *ngIf="loading">...</h2>
+
+      <p>Total Employees</p>
+
+    </div>
+
+    <div class="stat-box">
+
+      <h2 *ngIf="!loading">
+        {{ totalDepartments }}
+      </h2>
+
+      <h2 *ngIf="loading">...</h2>
+
+      <p>Departments</p>
+
+    </div>
+
+    <div class="stat-box">
+
+      <h2 *ngIf="!loading">
+        {{ activeEmployees }}
+      </h2>
+
+      <h2 *ngIf="loading">...</h2>
+
+      <p>Active Employees</p>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
   <footer class="landing-footer">
-    © 2026 IBM Enterprise Management System. All rights reserved.
+
+    © 2026 IBM Enterprise Management System.
+    All rights reserved.
+
   </footer>
+
 </div>

@@ -1,26 +1,125 @@
 <div class="home-container">
+
   <div class="hero">
-    <h1>Welcome to IBM EMS</h1>
-    <p>The next generation Employee Management System. Secure, efficient, and built for scale.</p>
-    
-    <div class="stats-grid">
-      <div class="stat-card">
-        <span class="stat-value">Active</span>
-        <span class="stat-label">System Status</span>
+
+    <!-- ADMIN VIEW -->
+    <div *ngIf="isAdmin">
+
+      <div class="welcome-badge">
+        ADMIN PORTAL
       </div>
-      <div class="stat-card">
-        <span class="stat-value">Secure</span>
-        <span class="stat-label">Authentication</span>
+
+      <h1>
+        Welcome Back Admin
+      </h1>
+
+      <p>
+        Manage employees, departments,
+        projects, and enterprise operations
+        from one centralized dashboard.
+      </p>
+
+      <!-- CLICKABLE STATS -->
+      <div class="stats-grid">
+
+        <div
+          class="stat-card clickable-card"
+          routerLink="/employees"
+        >
+          <span class="stat-value">
+              {{ employeeCount() }}
+            </span>
+          <span class="stat-label">Employees</span>
+        </div>
+
+        <div
+          class="stat-card clickable-card"
+          routerLink="/departments"
+        >
+          <span class="stat-value">
+             {{ departmentCount() }}
+          </span>
+          <span class="stat-label">Departments</span>
+        </div>
+
+        <div
+          class="stat-card clickable-card"
+          routerLink="/projects"
+        >
+         <span class="stat-value">
+           {{ projectCount() }}
+         </span>
+          <span class="stat-label">Projects</span>
+        </div>
+
       </div>
-      <div class="stat-card">
-        <span class="stat-value">Global</span>
-        <span class="stat-label">Employee Network</span>
+
+      <!-- ACTION BUTTONS -->
+      <div class="actions">
+
+        <button
+          routerLink="/employees"
+          class="btn-primary"
+        >
+          Manage Employees
+        </button>
+
+        <button
+          routerLink="/departments"
+          class="btn-secondary"
+        >
+          Departments
+        </button>
+
+        <button
+          routerLink="/projects"
+          class="btn-secondary"
+        >
+          Projects
+        </button>
+
       </div>
+
     </div>
 
-    <div class="actions">
-      <button routerLink="/employees" class="btn-primary">Manage Employees</button>
-      <button class="btn-secondary">View Reports</button>
+    <!-- EMPLOYEE VIEW -->
+    <div *ngIf="!isAdmin">
+
+      <div class="welcome-badge employee-badge">
+        EMPLOYEE PORTAL
+      </div>
+
+      <h1>
+        Welcome {{ username }}
+      </h1>
+
+      <p>
+        Track your attendance,
+        tasks, performance,
+        and employee activities.
+      </p>
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <span class="stat-value">96%</span>
+          <span class="stat-label">Attendance</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-value">4</span>
+          <span class="stat-label">Pending Tasks</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-value">A+</span>
+          <span class="stat-label">Performance</span>
+        </div>
+
+      </div>
+
     </div>
+
   </div>
+
 </div>

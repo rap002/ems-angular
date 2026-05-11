@@ -1,50 +1,131 @@
 <div class="employee-container">
+
   <div class="header-section">
+
     <div class="title-area">
       <h1>Employee Directory</h1>
-      <p class="subtitle">Search, view, and manage IBM personnel</p>
+      <p class="subtitle">
+        Search, view, and manage IBM personnel
+      </p>
     </div>
+
     <div class="header-actions">
-      <button *ngIf="isAdmin()" routerLink="/employees/add" class="btn btn-add">
-        <span class="icon">+</span> Add New Employee
+
+      <button
+        *ngIf="isAdmin()"
+        routerLink="/employees/add"
+        class="btn btn-add"
+      >
+        <span class="icon">+</span>
+        Add New Employee
       </button>
+
     </div>
+
   </div>
 
+  <!-- SEARCH + FILTER -->
   <div class="search-section">
+
     <div class="search-container">
+
       <div class="search-input-wrapper">
+
         <span class="search-icon">🔍</span>
-        <input type="text" #searchInput (keyup.enter)="executeSearch(searchInput.value)" placeholder="Search by name or ID...">
+
+        <input
+          type="text"
+          #searchInput
+          (keyup.enter)="executeSearch(searchInput.value)"
+          placeholder="Search by name or ID..."
+        >
+
       </div>
-      <button (click)="executeSearch(searchInput.value)" class="btn btn-search">Search</button>
+
+      <button
+        (click)="executeSearch(searchInput.value)"
+        class="btn btn-search"
+      >
+        Search
+      </button>
+
     </div>
+
+    <!-- FILTERS -->
     <div class="filter-controls">
-      <!-- <select #statusFilter [value]="currentStatus()" (change)="loadEmployees(undefined, statusFilter.value)">
-        <option value="">All Statuses</option>
-        <option value="ACTIVE">Active Only</option>
-        <option value="INACTIVE">Inactive</option>
-        <option value="TERMINATED">Terminated</option>
-      </select> -->
 
-      <select #deptFilter (change)="loadEmployees(deptFilter.value, undefined)">
-        <option value="">All Departments</option>
-        <option *ngFor="let dept of departments()" [value]="dept.id">{{ dept.name }}</option>
+ <select
+        #statusFilter
+        [value]="currentStatus()"
+        (change)="loadEmployees(undefined, statusFilter.value)"
+      >
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="ACTIVE">
+          Active
+        </option>
+
+        <option value="INACTIVE">
+          Inactive
+        </option>
+
+        <option value="TERMINATED">
+          Terminated
+        </option>
+
       </select>
+
+      <!-- DEPARTMENT FILTER -->
+      <select
+        #deptFilter
+        (change)="loadEmployees(deptFilter.value)"
+      >
+
+        <option value="">
+          All Departments
+        </option>
+
+        <option
+          *ngFor="let dept of departments()"
+          [value]="dept.id"
+        >
+          {{ dept.name }}
+        </option>
+
+      </select>
+
     </div>
+
   </div>
 
+  <!-- LOADING -->
   <div *ngIf="loading()" class="loading">
-    <div class="spinner"></div>
-    <p>Retrieving data...</p>
-  </div>
-  
-  <div *ngIf="error()" class="error">{{ error() }}</div>
 
+    <div class="spinner"></div>
+
+    <p>Retrieving data...</p>
+
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="error()" class="error">
+
+    {{ error() }}
+
+  </div>
+
+  <!-- TABLE -->
   <div class="card" *ngIf="!loading() && !error()">
+
     <div class="table-responsive">
+
       <table class="employee-table">
+
         <thead>
+
           <tr>
             <th>Employee Details</th>
             <th>Contact</th>
@@ -52,54 +133,121 @@
             <th>Status</th>
             <th *ngIf="isAdmin()">Actions</th>
           </tr>
+
         </thead>
+
         <tbody>
+
           <tr *ngFor="let emp of employees()">
+
             <td>
+
               <div class="emp-identity">
-                <div class="emp-initials">{{ emp.firstName.charAt(0) }}{{ emp.lastName.charAt(0) }}</div>
-                <div>
-                  <div class="emp-name">{{ emp.firstName }} {{ emp.lastName }}</div>
-                  <div class="emp-id">System ID: #{{ emp.id }}</div>
+
+                <div class="emp-initials">
+                  {{ emp.firstName.charAt(0) }}{{ emp.lastName.charAt(0) }}
                 </div>
+
+                <div>
+
+                  <div class="emp-name">
+                    {{ emp.firstName }} {{ emp.lastName }}
+                  </div>
+
+                  <div class="emp-id">
+                    System ID: #{{ emp.id }}
+                  </div>
+
+                </div>
+
               </div>
+
             </td>
+
             <td>
-              <div class="emp-contact">{{ emp.email }}</div>
-              <div class="emp-phone">{{ emp.phone }}</div>
+
+              <div class="emp-contact">
+                {{ emp.email }}
+              </div>
+
+              <div class="emp-phone">
+                {{ emp.phone }}
+              </div>
+
             </td>
-            <td>{{ emp.roleName || 'N/A' }}</td>
+
             <td>
-              <span class="status-badge" [ngClass]="emp.status.toLowerCase()">
+              {{ emp.roleName || 'N/A' }}
+            </td>
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="emp.status.toLowerCase()"
+              >
                 {{ emp.status }}
               </span>
+
             </td>
+
             <td *ngIf="isAdmin()">
+
               <div class="action-buttons-group">
-                <button [routerLink]="['/employees', emp.id]" class="action-btn view-btn" title="View Full Profile">View</button>
-                <button [routerLink]="['/employees/edit', emp.id]" class="action-btn edit-btn" title="Edit Employee">Edit</button>
-                <button (click)="deleteEmployee(emp.id)" class="action-btn delete-btn" title="Terminate Employee">Delete</button>
+
+                <button
+                  [routerLink]="['/employees', emp.id]"
+                  class="action-btn view-btn"
+                >
+                  View
+                </button>
+
+                <button
+                  [routerLink]="['/employees/edit', emp.id]"
+                  class="action-btn edit-btn"
+                >
+                  Edit
+                </button>
+
+                <button
+                  (click)="deleteEmployee(emp.id)"
+                  class="action-btn delete-btn"
+                >
+                  Delete
+                </button>
+
               </div>
+
             </td>
+
           </tr>
+
+          <!-- EMPTY -->
           <tr *ngIf="employees().length === 0">
+
             <td colspan="5" class="empty-state">
-              <p>No employees found matching your search criteria.</p>
-              <button (click)="loadEmployees()" class="btn btn-outline">Clear Search</button>
+
+              <p>
+                No employees found matching your search criteria.
+              </p>
+
+              <button
+                (click)="loadEmployees()"
+                class="btn btn-outline"
+              >
+                Clear Search
+              </button>
+
             </td>
+
           </tr>
+
         </tbody>
+
       </table>
+
     </div>
 
-    <div class="pagination" *ngIf="totalPages() > 1">
-      <button class="btn btn-icon" [disabled]="currentPage() === 0" (click)="prevPage()">
-        &laquo; Prev
-      </button>
-      <span class="page-info">Page {{ currentPage() + 1 }} of {{ totalPages() }}</span>
-      <button class="btn btn-icon" [disabled]="currentPage() >= totalPages() - 1" (click)="nextPage()">
-        Next &raquo;
-      </button>
-    </div>
   </div>
+
 </div>

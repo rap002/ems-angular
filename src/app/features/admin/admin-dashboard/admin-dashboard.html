@@ -1,0 +1,127 @@
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-header">
+      <h2>IBM EMS</h2>
+      <p>Admin Panel</p>
+    </div>
+
+    <nav class="sidebar-nav">
+
+      <a routerLink="/admin-dashboard" class="active">
+        Dashboard
+      </a>
+
+      <a routerLink="/employees">
+        Employees
+      </a>
+
+      <a routerLink="/departments">
+        Departments
+      </a>
+
+      <a routerLink="/projects">
+        Projects
+      </a>
+
+      <a routerLink="/roles">
+        Roles
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p>Welcome back, Administrator</p>
+      </div>
+
+      <button class="profile-btn">
+        Admin
+      </button>
+
+    </header>
+
+    <!-- STATS -->
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <h3>Employees</h3>
+        <h2>125</h2>
+        <p>Active workforce</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Departments</h3>
+        <h2>8</h2>
+        <p>Operational teams</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Projects</h3>
+        <h2>24</h2>
+        <p>Running projects</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>System Health</h3>
+        <h2>99%</h2>
+        <p>Platform uptime</p>
+      </div>
+
+    </section>
+
+    <!-- QUICK ACTIONS -->
+    <section class="quick-actions">
+
+      <h2>Quick Actions</h2>
+
+      <div class="action-grid">
+
+        <button routerLink="/employees/add">
+          Add Employee
+        </button>
+
+        <button routerLink="/departments/add">
+          Add Department
+        </button>
+
+        <button routerLink="/projects/add">
+          Add Project
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ACTIVITY -->
+    <section class="activity-section">
+
+      <h2>Recent Activity</h2>
+
+      <div class="activity-card">
+        Employee John added to Engineering Department
+      </div>
+
+      <div class="activity-card">
+        Project updated successfully
+      </div>
+
+      <div class="activity-card">
+        Department details modified
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

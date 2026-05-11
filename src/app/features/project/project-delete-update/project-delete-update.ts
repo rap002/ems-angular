@@ -1,7 +1,11 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
+
 import { Router, RouterModule } from '@angular/router';
+
 import {
   ProjectResponse,
   ProjectService,
@@ -14,36 +18,72 @@ import {
   templateUrl: './project-delete-update.html',
   styleUrl: './project-delete-update.css',
 })
+
 export class ProjectDeleteUpdate implements OnInit {
+
   private projectService = inject(ProjectService);
+
   private router = inject(Router);
 
   projects = signal<ProjectResponse[]>([]);
+
   filteredProjects = signal<ProjectResponse[]>([]);
 
   loading = false;
+
+  errorMessage = '';
+
   searchText = '';
 
   ngOnInit(): void {
+
     this.loadProjects();
+
   }
 
-  loadProjects() {
+  loadProjects(): void {
+
+    console.log('LOADING PROJECTS...');
+
     this.loading = true;
 
+    this.errorMessage = '';
+
     this.projectService.getAllProjects().subscribe({
-      next: (res) => {
-        this.projects.set(res);
-        this.filteredProjects.set(res);
+
+      next: (res: any) => {
+
+        console.log('PROJECT RESPONSE:', res);
+
+        // FIX RESPONSE
+        const projects = Array.isArray(res)
+          ? res
+          : res.content || [];
+
+        this.projects.set(projects);
+
+        this.filteredProjects.set(projects);
+
         this.loading = false;
+
       },
-      error: () => {
+
+      error: (err) => {
+
+        console.error('PROJECT API ERROR:', err);
+
         this.loading = false;
+
+        this.errorMessage = 'Failed to load projects';
+
       },
+
     });
+
   }
 
-  onSearch() {
+  onSearch(): void {
+
     const keyword = this.searchText.toLowerCase();
 
     const filtered = this.projects().filter((project) =>
@@ -51,24 +91,43 @@ export class ProjectDeleteUpdate implements OnInit {
     );
 
     this.filteredProjects.set(filtered);
+
   }
 
-  editProject(id: string) {
+  editProject(id: string): void {
+
     this.router.navigate(['/projects/update', id]);
+
   }
 
-  deleteProject(id: string) {
-    const confirmed = confirm('Are you sure you want to delete this project?');
+  deleteProject(id: string): void {
+
+    const confirmed = confirm(
+      'Are you sure you want to delete this project?'
+    );
 
     if (!confirmed) return;
 
     this.projectService.deleteProject(id).subscribe({
+
       next: () => {
+
+        alert('Project deleted');
+
         this.loadProjects();
+
       },
-      error: () => {
+
+      error: (err) => {
+
+        console.error(err);
+
         alert('Failed to delete project');
+
       },
+
     });
+
   }
+
 }
