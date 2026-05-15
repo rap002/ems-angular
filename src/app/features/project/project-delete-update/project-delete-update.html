@@ -26,15 +26,15 @@
 
   </div>
 
-  <div *ngIf="loading">
+  <!-- <div *ngIf="loading">
     Loading projects...
-  </div>
+  </div> -->
 
   <div *ngIf="errorMessage">
     {{ errorMessage }}
   </div>
 
-  <table *ngIf="!loading && filteredProjects().length > 0">
+  <table *ngIf=" filteredProjects().length > 0">
 
     <thead>
 
