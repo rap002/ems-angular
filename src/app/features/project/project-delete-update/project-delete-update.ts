@@ -29,7 +29,7 @@ export class ProjectDeleteUpdate implements OnInit {
 
   filteredProjects = signal<ProjectResponse[]>([]);
 
-  loading = false;
+  // loading = false;
 
   errorMessage = '';
 
@@ -45,7 +45,7 @@ export class ProjectDeleteUpdate implements OnInit {
 
     console.log('LOADING PROJECTS...');
 
-    this.loading = true;
+    // this.loading = true;
 
     this.errorMessage = '';
 
@@ -64,7 +64,7 @@ export class ProjectDeleteUpdate implements OnInit {
 
         this.filteredProjects.set(projects);
 
-        this.loading = false;
+        // this.loading = false;
 
       },
 
@@ -72,7 +72,7 @@ export class ProjectDeleteUpdate implements OnInit {
 
         console.error('PROJECT API ERROR:', err);
 
-        this.loading = false;
+        // this.loading = false;
 
         this.errorMessage = 'Failed to load projects';
 

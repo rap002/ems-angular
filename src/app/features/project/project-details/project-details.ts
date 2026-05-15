@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +24,9 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
   isAssigningEmployee = false;
   isEmployeesLoading = false;
   isLoading = true;
+  showEmployeeModal = false;
+  selectedEmployee: EmployeeResponse | null = null;
+  private destroy$ = new Subject<void>();
 
   errorMessage = '';
 
@@ -31,7 +34,8 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private projectService: ProjectService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -50,9 +54,11 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
           this.loadProjectDetails(projectId);
           this.loadProjectEmployees(projectId);
           this.loadAllEmployees();
+          this.cdr.detectChanges();
         } else {
           this.isLoading = false;
           this.errorMessage = 'Project ID is missing or invalid.';
+          this.cdr.detectChanges();
         }
       });
   }
@@ -79,6 +85,7 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         finalize(() => {
           this.isLoading = false;
+          this.cdr.detectChanges();
         })
       )
       .subscribe({
@@ -95,10 +102,13 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
               this.employees = assignedEmployees;
             }
           }
+          this.cdr.detectChanges();
         },
         error: (error) => {
           this.errorMessage = error?.error?.message || error?.message || 'Failed to load project details';
           console.error('Error loading project:', error);
+          this.isLoading = false;
+          this.cdr.detectChanges();
         }
       });
   }
@@ -137,10 +147,12 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.employees = this.normalizeEmployeeList(data);
+          this.cdr.detectChanges();
         },
         error: (error) => {
           console.error('Error loading project employees:', error);
           this.employees = [];
+          this.cdr.detectChanges();
         }
       });
   }
@@ -151,10 +163,12 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (page) => {
           this.allEmployees = this.normalizeEmployeeList(page.content || []);
+          this.cdr.detectChanges();
         },
         error: (error) => {
           console.error('Error loading employees:', error);
           this.allEmployees = [];
+          this.cdr.detectChanges();
         }
       });
   }

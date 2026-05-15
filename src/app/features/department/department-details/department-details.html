@@ -29,7 +29,7 @@
             <th>ID</th>
             <th>Department Name</th>
             <th>Description</th>
-            <th>Action</th>
+            <th *ngIf="isAdmin()">Action</th>
           </tr>
         </thead>
 
@@ -38,7 +38,7 @@
             <td>{{ department.id }}</td>
             <td>{{ department.name }}</td>
             <td>{{ department.description }}</td>
-            <td>
+            <td *ngIf="isAdmin()">
               <div class="action-buttons">
                 <button
                   type="button"
